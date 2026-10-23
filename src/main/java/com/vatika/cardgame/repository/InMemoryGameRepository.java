@@ -1,6 +1,5 @@
 package com.vatika.cardgame.repository;
 
-import com.vatika.cardgame.domain.Deck;
 import com.vatika.cardgame.domain.Game;
 import org.springframework.stereotype.Repository;
 
