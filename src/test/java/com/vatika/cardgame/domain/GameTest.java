@@ -47,8 +47,9 @@ public class GameTest {
     }
     @Test void playersAreSortedByTotalValueDescending(){
         Game game = new Game(UUID.randomUUID());
-        Player a = game.addPlayer("A");
+
         Player b = game.addPlayer("B");
+        Player a = game.addPlayer("A");
 
         b.receive(List.of(new Card(Suit.CLUBS, Rank.SEVEN), new Card(Suit.HEARTS, Rank.QUEEN)));   // 19
         a.receive(List.of(new Card(Suit.SPADES, Rank.TEN), new Card(Suit.HEARTS, Rank.KING)));     // 23
@@ -57,8 +58,8 @@ public class GameTest {
     }
     @Test void playersWithSameTotalAreSortedByName(){
         Game game = new Game(UUID.randomUUID());
-        Player alice = game.addPlayer("A");
         Player bob = game.addPlayer("B");
+        Player alice = game.addPlayer("A");
 
         alice.receive(List.of(new Card(Suit.SPADES, Rank.TEN), new Card(Suit.HEARTS, Rank.KING)));
         bob.receive(List.of(new Card(Suit.SPADES, Rank.TEN), new Card(Suit.HEARTS, Rank.KING)));
