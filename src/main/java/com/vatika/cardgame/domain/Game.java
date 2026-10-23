@@ -42,7 +42,7 @@ public class Game {
 
     public List<Player> playersByTotalValueDesc(){
         return players.values().stream()
-                .sorted(Comparator.comparing(Player::totalValue).reversed()
+                .sorted(Comparator.comparingInt(Player::totalValue).reversed()
                         .thenComparing(Player::getName))
                 .toList();
     }
