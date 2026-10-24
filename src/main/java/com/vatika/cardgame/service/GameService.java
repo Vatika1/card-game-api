@@ -1,6 +1,8 @@
 package com.vatika.cardgame.service;
 
 import com.vatika.cardgame.domain.*;
+import com.vatika.cardgame.exception.DeckNotFoundException;
+import com.vatika.cardgame.exception.GameNotFoundException;
 import com.vatika.cardgame.repository.DeckRepository;
 import com.vatika.cardgame.repository.GameRepository;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package com.vatika.cardgame.domain;
 
+import com.vatika.cardgame.exception.DeckAlreadyUsedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;

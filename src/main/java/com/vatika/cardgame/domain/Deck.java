@@ -1,5 +1,7 @@
 package com.vatika.cardgame.domain;
 
+import com.vatika.cardgame.exception.DeckAlreadyUsedException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +22,7 @@ public class Deck {
         this.cards = List.copyOf(cards);
     }
 
-    public List<Card> takeCards(){
+    public synchronized List<Card> takeCards(){
         if(used){
             throw new DeckAlreadyUsedException(id);
         }
@@ -32,7 +34,4 @@ public class Deck {
         return id;
     }
 
-    public boolean isUsed() {
-        return used;
-    }
 }

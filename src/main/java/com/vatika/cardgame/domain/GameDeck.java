@@ -59,7 +59,4 @@ public class GameDeck {
         return cards.size();
     }
 
-    public List<Card> getCards() {
-        return Collections.unmodifiableList(cards);
-    }
 }

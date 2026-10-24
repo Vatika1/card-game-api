@@ -1,3 +1,6 @@
 spring:
   application:
     name: card-game-api
+  mvc:
+    problemdetails:
+      enabled: true

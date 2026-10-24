@@ -1,4 +1,4 @@
-package com.vatika.cardgame.domain;
+package com.vatika.cardgame.exception;
 
 import java.util.UUID;
 

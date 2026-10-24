@@ -89,7 +89,9 @@ class GameApiTest {
         mockMvc.perform(post("/api/games/{g}/players/{p}/deal", gameId, playerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"count\":0}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("count must be greater than 0"));;
     }
 
     @Test
