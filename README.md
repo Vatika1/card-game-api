@@ -79,6 +79,7 @@ Errors use the RFC 9457 `ProblemDetail` format: 400 invalid input, 404 unknown g
 
 - **Unit tests** for `Deck`, `GameDeck`, `Player`, `Game`, including the spec's 52 deals then a 53rd that returns nothing (and the same with 2 decks), a seeded-shuffle test, sorting, and counts.
 - **Integration tests** (`@SpringBootTest` + MockMvc) run real HTTP requests through controllers, service and repositories, covering the main flow and 400/404/409 errors.
+- **Concurrency test:** 8 threads fire 100 simultaneous deals at one game; exactly 52 unique cards come out, proving the per-game lock works.
 
 ## Use of AI
 
@@ -86,11 +87,11 @@ I used Claude (Anthropic) throughout:
 - **Understanding the domain:** I had no card-game background, so I used it to clarify terms (suit, rank, shoe/game deck) and the spec's edge cases.
 - **Design:** I designed the domain model (which classes exist and what each owns) and the REST endpoints from the spec, and used AI to challenge it. For example, it pointed out that a separate `Shoe` class duplicated `GameDeck`.
 - **Code generation:** AI generated much of the code from my design, mostly boilerplate (DTOs, controllers, config, repositories, exception handler), plus first drafts of domain classes. I reviewed every line and changed what I disagreed with, for example:
-    - replaced a static factory `Deck.standard()` with a plain constructor, since only one kind of deck exists;
-    - removed an unused `getCards()` getter that would have let callers bypass the "deck used once" rule;
-    - removed a redundant `TreeMap` → `LinkedHashMap` copy;
-    - asked for response objects instead of returning domain objects, which led to the `PlayerTotal` snapshot that fixed a real concurrency gap.
-    - rejected non-standard package names and used the conventional Spring layout (`controller`, `service`, `repository`, `dto`, `exception`, `config`);
-    - insisted on a concurrency test for simultaneous deals, which the AI had suggested as optional.
-- **Tests:** I wrote the domain unit tests myself, and AI reviewed them for gaps. AI drafted the MockMvc integration tests and the concurrency test; I went through each one step by step, ran them, and can explain every assertion. - **Post-submission review:** an AI-assisted review of the final repo flagged a race: two different games could claim the same deck at once. I confirmed it with a stress test (it reproduced 2 times in 200,000 runs), fixed it by synchronizing `Deck.takeCards()`, and verified 0 failures afterwards. Manual end-to-end testing of the fix also caught a regression where enabling `ProblemDetail` replaced my validation messages; I fixed the handler order and added a test assertion so it can't come back unnoticed.
-- **Concurrency test:** 8 threads fire 100 simultaneous deals at one game; exactly 52 unique cards come out, proving the per-game lock works.
+  - replaced a static factory `Deck.standard()` with a plain constructor, since only one kind of deck exists;
+  - removed an unused `getCards()` getter that would have let callers bypass the "deck used once" rule;
+  - removed a redundant `TreeMap` → `LinkedHashMap` copy;
+  - asked for response objects instead of returning domain objects, which led to the `PlayerTotal` snapshot that fixed a real concurrency gap;
+  - rejected non-standard package names and used the conventional Spring layout (`controller`, `service`, `repository`, `dto`, `exception`, `config`);
+  - insisted on a concurrency test for simultaneous deals, which the AI had suggested as optional.
+- **Tests:** I wrote the domain unit tests myself, and AI reviewed them for gaps. AI drafted the MockMvc integration tests and the concurrency test; I went through each one step by step, ran them, and can explain every assertion.
+- **Post-submission review:** an AI-assisted review of the final repo flagged a race: two different games could claim the same deck at once. I confirmed it with a stress test (it reproduced 2 times in 200,000 runs), fixed it by synchronizing `Deck.takeCards()`, and verified 0 failures afterwards. Manual end-to-end testing of the fix also caught a regression where enabling `ProblemDetail` replaced my validation messages; I fixed the handler order and added a test assertion so it can't come back unnoticed.
